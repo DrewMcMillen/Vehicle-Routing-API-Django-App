@@ -6,7 +6,7 @@ import pandas as pd
 
 # Create your views here.
 from .models import solutionName, deliverySite
-from .forms import runFileForm, saveVRPForm
+from .forms import runFileForm, saveVRPForm, solutionNameSearch
 #First experimental view; all it did was download the results
 def runForm(request):
 
@@ -67,5 +67,13 @@ def runResults(request):
     return render(request, 'runVRP/form.html',{'saveForm':saveForm})
 
 def compareResults(request):
-
-    return render(request, 'runVRP/compareResults.html')
+    if request.method == 'GET':
+        solnQForm = solutionNameSearch(request.GET)
+        if solnQForm.is_valid():
+            sol_name_q = solnQForm.cleaned_data['nameFilter']
+            soln = deliverySite.objects.filter(solution__name=sol_name_q)
+            context = {'searchedSoln':soln, 'solnQForm': solnQForm}
+            return render(request, 'runVRP/compareResults.html', context)
+    solnQForm = solutionNameSearch()
+    context = {'solnQForm':solnQForm, 'searchedSoln':[]}
+    return render(request, 'runVRP/compareResults.html',context)

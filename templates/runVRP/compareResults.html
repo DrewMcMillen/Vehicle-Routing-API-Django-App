@@ -9,4 +9,21 @@
 
 <body>
     <p>This is the Results Comparison Page</p>
+    <br>
+    <form action="" method="get" id="querySolns">
+    {% csrf_token %}
+
+   {{ solnQForm }}
+    <button name="search_solns">Search VRP Results</button>
+</form>
+{% if searchedSoln %}
+<h1>Solution Found</h1>
+<ul>
+{% for site in searchedSoln  %}
+<li>
+{{site.longitude}}
+</li>
+{% endfor %}
+</ul>
+{% endif %}
 </body>

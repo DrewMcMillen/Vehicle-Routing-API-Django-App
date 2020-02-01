@@ -7,3 +7,6 @@ class runFileForm(forms.Form):
 class saveVRPForm(forms.Form):
     vrpResultsJSON = forms.CharField(widget=forms.TextInput(attrs={'type':'hidden', 'id':'saveFieldVRP','name':'savedataVRP'}))
     solutionName = forms.CharField(label='Solution Save Name', max_length=255, required = False)
+
+class solutionNameSearch(forms.Form):
+    nameFilter = forms.CharField(label='Search Solutions', max_length=255)
