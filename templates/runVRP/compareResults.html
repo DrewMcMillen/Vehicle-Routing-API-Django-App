@@ -1,14 +1,16 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name = "viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content = "ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}" type="text/css">
 </head>
 
 <body>
-    <p>This is the Results Comparison Page</p>
+    <h1><p>This is the Results Comparison Page</p></h1>
     <br>
     <form action="" method="get" id="querySolns">
     {% csrf_token %}
@@ -17,13 +19,23 @@
     <button name="search_solns">Search VRP Results</button>
 </form>
 {% if searchedSoln %}
-<h1>Solution Found</h1>
-<ul>
-{% for site in searchedSoln  %}
-<li>
-{{site.longitude}}
-</li>
-{% endfor %}
-</ul>
+<table class="table table-sm table-bordered" style="width:50%">
+    <thead>
+        <tr>
+            <th scope="col" style="width: 20%">Truck</th>
+            <th scope="col" style="width: 20%">Longitude</th>
+            <th scope="col" style="width: 20%">Latitude</th>
+        </tr>
+    </thead>
+        <tbody>
+            {% for site in searchedSoln  %}
+            <tr>
+                <td>{{site.truck}}</td>
+                <td>{{site.longitude}}</td>
+                <td>{{site.latitude}}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+</table>
 {% endif %}
 </body>
