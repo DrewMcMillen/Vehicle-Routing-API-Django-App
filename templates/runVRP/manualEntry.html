@@ -1,67 +1,92 @@
 <!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content = "ie=edge">
-    <title>Results Entry</title>
-</head>
-
-<body>
-
-<h1>Results Entry Page</h1>
-
-<form method="POST" action="">
-    {% csrf_token %}
-
-    {{ formset.management_form }}
-    <fieldset disabled class="empty-form" style="display: none">
-        {{ formset.empty_form }}
-    </fieldset>
-    {{nameForm}}
-    <br><br>
-    <table class="formset-table">
-    <thead>
-        <tr>
-            <th>Truck</th>
-            <th>Longitude</th>
-            <th>Latitude</th>
-        </tr>
-    <tbody>
-    {% for form in formset %}
-        <tr>
-            <td>{{form.truck}}</td>
-            <td>{{form.longitude}}</td>
-            <td>{{form.latitude}}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Results Entry</title>
+	</head>
+	<body>
+		<input type="hidden" name="form-TOTAL_FORMS" value="2" id="id_form-TOTAL_FORMS">
+		<input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS">
+		<input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS">
+		<input type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS">
+		<fieldset disabled="" class="empty-form" style="display: none">
+			<input type="number" name="form-__prefix__-truck" id="id_form-__prefix__-truck">
+			<label for="id_form-__prefix__-longitude">Longitude:</label>
+			<input type="number" name="form-__prefix__-longitude" step="0.00001" id="id_form-__prefix__-longitude">
+			<label for="id_form-__prefix__-latitude">Latitude:</label>
+			<input type="number" name="form-__prefix__-latitude" step="0.00001" id="id_form-__prefix__-latitude">
+		</fieldset>
+		<label for="id_solutionName">Save Entry:</label>
+		<input type="text" name="solutionName" maxlength="255" required="" id="id_solutionName">
+		<br><br>
+		<table class="formset-table">
+		<thead>
+			<tr>
+				<th>Truck</th>
+				<th>Longitude</th>
+				<th>Latitude</th>
+			</tr>
+		</thead>
+		<tbody>
+            <tr>
+				<td><input type="number" name="form-0-truck" id="id_form-0-truck"></td>
+				<td><input type="number" name="form-0-longitude" step="0.00001" id="id_form-0-longitude"></td>
+				<td><input type="number" name="form-0-latitude" step="0.00001" id="id_form-0-latitude"></td>
+			</tr>
+			<tr>
+				<td><input type="number" name="form-1-truck" id="id_form-1-truck"></td>
+				<td><input type="number" name="form-1-longitude" step="0.00001" id="id_form-1-longitude"></td>
+				<td><input type="number" name="form-1-latitude" step="0.00001" id="id_form-1-latitude"></td>
+			</tr>
+			<tr id = testing_renumber>
+				<td><input type="number" name="form-__prefix__-truck" id="id_form-__prefix__-truck"></td>
+				<td><input type="number" name="form-__prefix__-longitude" step="0.00001" id="id_form-__prefix__-longitude"></td>
+				<td><input type="number" name="form-__prefix__-latitude" step="0.00001" id="id_form-__prefix__-latitude"></td>
+			</tr>
+		</tbody>
     </table>
 </form>
 <p></p>
-</body>
 
-<script type="text/javascript" src="{{STATIC_URL}}/static/jquery-3.4.1.min.js"></script>
+	</body>
+	<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+	<script>
+		function addForm(){
+			//Append row to the formset table and bind it to the $newRow handle
+			let $newRow = $(".formset-table tbody").append('<tr></tr>').children().last();
+			//clone the input elements of the empty form (children of the empty-form fieldset)
+			//and for each cloned input, append a td, select the td and then insert the cloned input
+			$(".empty-form").children("input").clone().each(function(){
+				$newRow.append("<td></td>").children().last().html($(this));
+			});
+			//renumber the inputs
+			renumberForm($newRow,"__prefix__","Rock n Roll")
+			//increment total forms
+		}
 
-<script>
-    //update element
+    function renumberForm($row, oldValue, newValue){
+        //row is jQuery obj, in this case it's the row of inputs we're renumbering
+		//each takes the input fields
+		$row.find("input").each(function(){
+			["name","id"].forEach((attrName) =>{
+				// 'this' will be the 'input' element currently being passed into 'each' 
+				newAttrValue = $(this).attr(attrName).replace(oldValue, newValue);
+				$(this).attr(attrName,newAttrValue)
+			})
+		})
+	}
+	
+	/*
+	let test_el_attribute = $("#id_form-1-truck").attr("name").replace("1","killer diller");
+	let test_el = $("#testing_renumber")
+	
+	renumberForm(test_el, "__prefix__","Awesome")
+	*/
+	addForm()
+	console.log(document.getElementsByTagName('html')[0].innerHTML)
+	</script>
 
-    function addForm(){
-        //Append row to the formset table and bind it to the $newRow handle
-        let $newRow = $(".formset-table tbody").append('<tr></tr>').children().last();
-        //clone the input elements of the empty form (children of the empty-form fieldset)
-        $(".empty-form").children("input").clone().each(function(){
-            $newRow.append("<td></td>").children().last().html($(this));
-        });
-        //increment total forms
-    };
-
-    function renumberForm(form, oldValue, newValue){
-        //remove oldValue and replace with newValue
-
-    };
-addForm()
-addForm()
-console.log(document.getElementsByTagName('html')[0].innerHTML);
-</script>
+	
+	
+</html>
