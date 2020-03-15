@@ -250,7 +250,7 @@ networkx==2.1
 nltk==3.3
 normality==0.6.1
 nose==1.3.7
-notebook==4.2.2
+notebook==5.7.8
 numexpr==2.6.5
 numpy==1.14.5
 oauth==1.0.1
