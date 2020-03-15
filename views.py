@@ -5,8 +5,8 @@ import pandas as pd
 
 
 # Create your views here.
-from .models import solutionName, deliverySite
-from .forms import runFileForm, saveVRPForm, solutionNameSearch
+from .models import solutionName, deliverySite, manDeliverySite, manualSolutionName
+from .forms import runFileForm, saveVRPForm, solutionNameSearch, manSolRowFormset, manSolutionName
 #First experimental view; all it did was download the results
 def runForm(request):
 
@@ -77,3 +77,42 @@ def compareResults(request):
     solnQForm = solutionNameSearch()
     context = {'solnQForm':solnQForm, 'searchedSoln':[]}
     return render(request, 'runVRP/compareResults.html',context)
+
+def dispatchEntry(request):
+    if request.method == 'GET':
+        formset = manSolRowFormset(request.GET or None)
+        nameForm = manSolutionName(request.GET or None)
+    elif request.method == 'POST':
+        #manually entered solution rows
+        formset = manSolRowFormset(request.POST)
+        #name of the solution (should match name of VRP generated soln)
+        nameForm = manSolutionName(request.POST)
+        if formset.is_valid() and nameForm.is_valid():
+            #get solution Name from form
+            name = nameForm.cleaned_data.get('solutionName')
+            #create manualSolutionName model object
+            solName = manualSolutionName(name=name)
+            #save solution name into database
+            solName.save()
+            #loop through rows and save models
+            for form in formset:
+                truck = form.cleaned_data.get('truck')
+                longitude = form.cleaned_data('longitude')
+                latitude = form.cleaned_data('latitude')
+                #save the row into the database
+                manDeliverySite(truck=truck,longitude=longitude,latitude=latitude,solution=solName).save()
+            return render(request,'runVRP/saveSuccess.html',{'vrpResultsJSON':[]})
+    return render(request, 'runVRP/manualEntry.html',{'nameForm':nameForm, 'formset':formset})
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -7,5 +7,6 @@ app_name = 'runVRPApp'
 
 urlpatterns = [
     path('', views.runResults, name='runForm'),
-    path('compareResults', views.compareResults, name='comparison')
+    path('compareResults', views.compareResults, name='comparison'),
+    path('dispatchEntry', views.dispatchEntry, name='manualEntry')
 ]

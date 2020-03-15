@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content = "ie=edge">
+    <title>Results Entry</title>
+</head>
+
+<body>
+
+<h1>Results Entry Page</h1>
+
+<form method="POST" action="">
+    {% csrf_token %}
+
+    {{ formset.management_form }}
+    <fieldset disabled class="empty-form" style="display: none">
+        {{ formset.empty_form }}
+    </fieldset>
+    {{nameForm}}
+    <br><br>
+    <table class="formset-table">
+    <thead>
+        <tr>
+            <th>Truck</th>
+            <th>Longitude</th>
+            <th>Latitude</th>
+        </tr>
+    <tbody>
+    {% for form in formset %}
+        <tr>
+            <td>{{form.truck}}</td>
+            <td>{{form.longitude}}</td>
+            <td>{{form.latitude}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</form>
+<p></p>
+</body>
+
+<script type="text/javascript" src="{{STATIC_URL}}/static/jquery-3.4.1.min.js"></script>
+
+<script>
+    //update element
+
+    function addForm(){
+        //Append row to the formset table and bind it to the $newRow handle
+        let $newRow = $(".formset-table tbody").append('<tr></tr>').children().last();
+        //clone the input elements of the empty form (children of the empty-form fieldset)
+        $(".empty-form").children("input").clone().each(function(){
+            $newRow.append("<td></td>").children().last().html($(this));
+        });
+        //increment total forms
+    };
+
+    function renumberForm(form, oldValue, newValue){
+        //remove oldValue and replace with newValue
+
+    };
+addForm()
+addForm()
+console.log(document.getElementsByTagName('html')[0].innerHTML);
+</script>
