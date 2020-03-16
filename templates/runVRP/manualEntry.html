@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-	<head>
+	{% load static %}
+<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title>Results Entry</title>
+		<link rel="stylesheet" href="{% static 'runVRP/css/bootstrap.min.css' %}" type="text/css">
 	</head>
 	<body>
 		<input type="hidden" name="form-TOTAL_FORMS" value="2" id="id_form-TOTAL_FORMS">
@@ -49,8 +51,15 @@
 </form>
 <p></p>
 
-	</body>
-	<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+<fieldset class="controls">
+    <button type="button" data-formset-add-form>
+      Add new form
+    </button>
+
+  </fieldset>
+
+</body>
+	<script type="text/javascript" src="{% static 'runVRP/jQuery/jquery-3.4.1.min.js' %}"></script>
 	<script>
 		function addForm(){
 			//Append row to the formset table and bind it to the $newRow handle
@@ -65,17 +74,17 @@
 			//increment total forms
 		}
 
-    function renumberForm($row, oldValue, newValue){
-        //row is jQuery obj, in this case it's the row of inputs we're renumbering
-		//each takes the input fields
-		$row.find("input").each(function(){
-			["name","id"].forEach((attrName) =>{
-				// 'this' will be the 'input' element currently being passed into 'each' 
-				newAttrValue = $(this).attr(attrName).replace(oldValue, newValue);
-				$(this).attr(attrName,newAttrValue)
+    	function renumberForm($row, oldValue, newValue){
+    	    //row is jQuery obj, in this case it's the row of inputs we're renumbering
+			//each takes the input fields
+			$row.find("input").each(function(){
+				["name","id"].forEach((attrName) =>{
+					// 'this' will be the 'input' element currently being passed into 'each' 
+					newAttrValue = $(this).attr(attrName).replace(oldValue, newValue);
+					$(this).attr(attrName,newAttrValue)
+				})
 			})
-		})
-	}
+		}
 	
 	/*
 	let test_el_attribute = $("#id_form-1-truck").attr("name").replace("1","killer diller");
@@ -83,8 +92,9 @@
 	
 	renumberForm(test_el, "__prefix__","Awesome")
 	*/
-	addForm()
-	console.log(document.getElementsByTagName('html')[0].innerHTML)
+	console.log($('[data-formset-add-form]').innerHTML)
+	document.querySelector("[data-formset-add-form]").addEventListener('click',addForm)
+	//console.log(document.getElementsByTagName('html')[0].innerHTML)
 	</script>
 
 	
